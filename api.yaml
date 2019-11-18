@@ -1,0 +1,1977 @@
+openapi: 3.0.0
+info:
+    title: Bethewave
+    description: This is a bethewave server
+    version: "1.0.0"
+    termsOfService: ''
+    contact:
+        email: hi@bethewave.vote
+    license:
+        name: Apache 2.0
+        url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+servers:
+    - url: https://btw-api-staging-2019.herokuapp.com
+      description: Staging
+    - url: https://btw-api-2019.herokuapp.com
+      description: Preprod
+    - url: https://btwapi-18.herokuapp.com
+      description: Production
+tags:
+    - name: auth
+      description: For backenders only, please don't use this endpoint to get or sign up user from frontend
+    - name: rule
+      description: For backend only
+components:
+    schemas:
+        User:
+            type: object
+            properties:
+                id:
+                    type: string
+                    example: 5cf92ec616aa911d42bce397
+                firstname:
+                    type: string
+                    example: Keanu
+                lastname:
+                    type: string
+                    example: Reeves
+                email:
+                    type: string
+                    example: k.reeves@example.com
+                points:
+                    type: number
+                zipcode:
+                    type: string
+                phoneNumber:
+                    type: string
+                profileImageUrl:
+                    type: string
+                bioInfo:
+                    type: string
+                birthdayDate:
+                    type: string
+                onboarding:
+                    type: object
+                    properties:
+                        addTenVoter:
+                            type: boolean
+                        importSource:
+                            type: boolean
+                        district:
+                            type: boolean
+                district:
+                    type: string
+                    example: ocd-division/country:us/state:al/cd:1
+            xml:
+                name: User
+        Districts:
+            type: object
+            properties:
+                _id:
+                    type: string
+                    example: 5d115c18f2ce32344e3bb9ee
+                ocdId:
+                    type: string
+                    description: Open Civic Data Identifier
+                    example: ocd-division/country:us/state:ny/cd:1
+                name:
+                    type: string
+                    description: Name of Congressional district
+                    example: New York's 1st congressional district
+                country:
+                    type: string
+                    example: us
+                state:
+                    type: string
+                    description: USA state
+                    example: ny
+                cd:
+                    type: string
+                    description: Number of Congressional district
+                    example: 1
+
+        PotentialVoter:
+            type: object
+            properties:
+                _id:
+                    type: string
+                firstname:
+                    type: string
+                lastname:
+                    type: string
+                socialId:
+                    type: string
+                avatar:
+                    type: string
+                socialNetwork:
+                    type: object
+                    properties:
+                        facebook:
+                            type: boolean
+                            default: false
+                        twitter:
+                            type: boolean
+                            default: false
+                phone:
+                    type: string
+                isVoter:
+                    type: boolean
+                    default: false
+                gender:
+                    type: string
+                firstTypeInfo:
+                    type: object
+                secondTypeInfo:
+                    type: object
+                thirdTypeInfo:
+                    type: object
+                captain:
+                    type: string
+                address:
+                    type: object
+                    properties:
+                        city:
+                            type: string
+                        region:
+                            type: string
+                        poBox:
+                            type: string
+                        streetAddress:
+                            type: string
+                        extendedAddress:
+                            type: string
+                        postalCode:
+                            type: string
+                        country:
+                            type: string
+                        contryCode:
+                            type: string
+        ContactWithPotentialVoters:
+            type: object
+            properties:
+                _id:
+                    type: string
+                userId:
+                    type: string
+                firstname:
+                    type: string
+                lastname:
+                    type: string
+                address:
+                    type: string
+                birthday:
+                    type: string
+                phone:
+                    type: string
+                gender:
+                    type: string
+                avatar:
+                    type: string
+                socialId:
+                    type: string
+                source:
+                    type: object
+                    properties:
+                        type:
+                            type: string
+                        name:
+                            type: string
+                potentialVoters:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/PotentialVoterV2'
+        PotentialVoterV2:
+            type: object
+            properties:
+                _id:
+                    type: string
+                id:
+                    type: string
+                contactId:
+                    type: string
+                _index:
+                    type: string
+                _score:
+                    type: number
+                firstname:
+                    type: string
+                lastname:
+                    type: string
+                phone:
+                    type: string
+                birthday:
+                    type: string
+                gender:
+                    type: string
+                voterStatusDescription:
+                    type: string
+                voterStatusReasonDecs:
+                    type: string
+        Task:
+            type: object
+            properties:
+                taskId:
+                    type: string
+                    example: 788f6187-999a-4305-9580-4ad518e7cped
+                parentTaskId:
+                    type: string
+                    example: id of the parent grouped task
+                voterId:
+                    type: string
+                    example: 984f6187-608a-4305-9580-4ad518e9eded
+                userId:
+                    type: string
+                    example: 5d120807fc4f11435c1073b5
+                ruleId:
+                    type: string
+                    example: 788f6187-999a-4305-9580-4ad518e7cped
+                status:
+                    type: string
+                    example: InProgress
+                taskName:
+                    type: string
+                    example: Get unregisteredvoters to be registered
+                taskSpread:
+                    type: string
+                    example: National
+                taskDescription:
+                    type: string
+                    example: This task voters whose voting status is <not registered>
+                points:
+                    type: number
+                    example: 50
+                startDate:
+                    type: string
+                endDate:
+                    type: string
+                comments:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            text:
+                                type: string
+                            images:
+                                type: array
+                                items:
+                                    type: string
+                            createdAt:
+                                type: string
+                subTasks:
+                    type: array
+                    items:
+                        $ref: '#/components/schemas/Task'
+            xml:
+                name: Task
+        Rule:
+            type: object
+            properties:
+                ruleID:
+                    type: string
+                    example: RGR_NAT_001
+                ruleName:
+                    type: string
+                    example: Get unregisteredvoters to be registered
+                ruleDescription:
+                    type: string
+                    example: This task voters whose voting status is <not registered>
+                ruleSpread:
+                    type: string
+                    example: National
+                points:
+                    type: number
+                    example: 50
+            xml:
+                name: Rule
+        Voter:
+            type: object
+            properties:
+                firstname:
+                    type: string
+                lastname:
+                    type: string
+                gender:
+                    type: string
+                avatar:
+                    type: string
+                captain:
+                    type: string
+                voterDescription:
+                    type: string
+                socialid:
+                    type: string
+                firstTypeInfo:
+                    type: object
+                secondTypeInfo:
+                    type: object
+                thirdTypeInfo:
+                    type: object
+                address:
+                    type: object
+                    properties:
+                        city:
+                            type: string
+                        region:
+                            type: string
+                        poBox:
+                            type: string
+                        streetAddress:
+                            type: string
+                        extendedAddress:
+                            type: string
+                        postalCode:
+                            type: string
+                        country:
+                            type: string
+                        contryCode:
+                            type: string
+                birthday:
+                    type: string
+                phone:
+                    type: string
+                isVoter:
+                    type: boolean
+                    default: false
+                source:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            type:
+                                type: string
+                                example: social
+                            name:
+                                type: string
+                                example: twitter
+                voterStatus:
+                    type: string
+                    default: null
+                comments:
+                    type: array
+                    items:
+                        type: object
+                        properties:
+                            text:
+                                type: string
+                                example: test comments
+                            images:
+                                type: array
+                                items:
+                                    type: string
+                            createdAt:
+                                type: string
+    securitySchemes:
+        access_token:
+            type: http
+            scheme: bearer
+            bearerFormat: JWT
+paths:
+    /auth/signin:
+        post:
+            tags:
+                - auth
+            summary: Authenticates user.
+            description: >-
+                Find user by email or userId (if social login), perform checks (password
+                if email/pass not social) and return user object if success
+            operationId: signIn
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    description: User email
+                                password:
+                                    type: string
+                                    description: User password (plain text)
+                                social:
+                                    type: boolean
+                                    description: Is it social login
+                                    default: false
+                                userId:
+                                    type: string
+                                    description: Auth0 user id (needed if social login)
+                            required:
+                                - email
+            responses:
+                '200':
+                    description: Successful signin
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+                '401':
+                    description: Incorrect email or password provided.
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 401
+                                    message:
+                                        type: string
+                                        example: "{ error:'acess_denied', errorDescription: 'Sorry, The email and password you entered don't match our records. Password fields may be case sensitive', businessErrorCode: 'BE-101' }"
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /auth/signup:
+        post:
+            tags:
+                - auth
+            summary: Registers user.
+            description: >-
+                Create user and return user object, if user by given email or userId (if
+                social login) not exists
+            operationId: signUp
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                firstname:
+                                    type: string
+                                lastname:
+                                    type: string
+                                email:
+                                    type: string
+                                    description: User email
+                                password:
+                                    type: string
+                                    description: User password (plain text)
+                                social:
+                                    type: boolean
+                                    description: Is it social login
+                                    default: false
+                                userId:
+                                    type: string
+                                    description: Auth0 user id (needed if social login)
+                                onboarding:
+                                    type: object
+                                    properties:
+                                        district:
+                                            type: boolean
+                                            default: false
+                                        importSource:
+                                            type: boolean
+                                            default: false
+                                        addTenVoters:
+                                            type: boolean
+                                            default: false
+                            required:
+                                - email
+            responses:
+                '200':
+                    description: Account created successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+                '400':
+                    description: A user with provided email address already exists
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 400
+                                    message:
+                                        type: string
+                                        example: "{ error:'acess_denied', errorDescription: 'Sorry, we cannot register you with this email. If you are not sure of your password, attempt to reset it or use another unique email', businessErrorCode: 'BE-103' }"
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /auth/getUser:
+        post:
+            tags:
+                - auth
+            summary: Get user.
+            description: >-
+                Find user by email or user id (if social login), and return user object,
+                if found
+            operationId: getUser
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    description: User email
+                                social:
+                                    type: boolean
+                                    description: Is it social login
+                                    default: false
+                                userId:
+                                    type: string
+                                    description: Auth0 user id (needed if social login)
+                            required:
+                                - email
+            responses:
+                '200':
+                    description: User found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/User'
+                '404':
+                    description: A user with provided email address was not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 404
+                                    message:
+                                        type: string
+                                        example: "{ error:'acess_denied', errorDescription: 'Sorry, The email and password you entered don't match our records. Password fields may be case sensitive', businessErrorCode: 'BE-103' }"
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /auth/verifyEmail:
+        post:
+            tags:
+                - auth
+            summary: Verify email.
+            description: 'Find not verified email user by email, and set verified, if found'
+            operationId: verifyEmail
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    description: User email
+                            required:
+                                - email
+            responses:
+                '200':
+                    description: Email verified successfully
+                '401':
+                    description: A user with provided email address was not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 401
+                                    message:
+                                        type: string
+                                        example: "{ error:'acess_denied', errorDescription: 'Sorry, The email and password you entered don't match our records. Password fields may be case sensitive', businessErrorCode: 'BE-102' }"
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /auth/changePassword:
+        post:
+            tags:
+                - auth
+            summary: Change password.
+            description: 'Find user by email, and changes his password, if found'
+            operationId: changePassword
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                                    description: User email
+                                newPassword:
+                                    type: string
+                                    description: User new password (plain text)
+                            required:
+                                - email
+                                - newPassword
+            responses:
+                '200':
+                    description: Password changed successfully
+                '401':
+                    description: A user with provided email address was not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 401
+                                    message:
+                                        type: string
+                                        example: "{ error:'acess_denied', errorDescription: 'Sorry, The email and password you entered don't match our records. Password fields may be case sensitive', businessErrorCode: 'BE-102' }"
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /auth/removeUser:
+        post:
+            tags:
+                - auth
+            summary: Remove user.
+            description: 'Find user by email, and removes him, if found'
+            operationId: removeUser
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                user_id:
+                                    type: string
+                                    description: User id
+                            required:
+                                - user_id
+            responses:
+                '200':
+                    description: User removed successfully
+                '400':
+                    description: Invalid user id format
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 400
+                                    message:
+                                        type: string
+                                        example: "Invalid user id format"
+                '404':
+                    description: User with provided id was not found
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 404
+                                    message:
+                                        type: string
+                                        example: "User with that id was not found!"
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /user:
+        get:
+            tags:
+                - user
+            summary: Return user.
+            description: 'Return info about registered users'
+            operationId: getUserInfo
+            responses:
+                '200':
+                    description: User was found
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                '400':
+                    description: User was not found
+                default:
+                    description: Internal server error
+            security:
+                - access_token: []
+        patch:
+            tags:
+                - user
+            summary: Update user data.
+            description: 'Accepts information about the user that needs to be updated. Allowed fields: ***firstname,      lastname, address, zipcode, district, phoneNumber,bioInfo, profileImageUrl, birthdayDate.*** You can send one or more of these fields'
+            operationId: updateUser
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                firstname:
+                                    type: string
+                                lastname:
+                                    type: string
+                                address:
+                                    type: string
+                                zipcode:
+                                    type: string
+                                district:
+                                    type: string
+                                phoneNumber:
+                                    type: string
+                                birthdayDate:
+                                    type: string
+                                profileImageUrl:
+                                    type: string
+                                bioInfo:
+                                    type: string
+                            example:
+                                district: ocd-division/country:us/state:al/cd:1
+            responses:
+                '200':
+                    description: User updated successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/User"
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+            security:
+                - access_token: []
+
+    /user/resetPassword/sendEmail:
+        post:
+            tags:
+                - user
+            summary: Send reset password email.
+            description: Generate reset password link and send it to provided email
+            operationId: sendResetPasswordEmail
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                email:
+                                    type: string
+                            required:
+                                - email
+                        example:
+                            email: example@gmail.com
+            responses:
+                '200':
+                    description: Request processed successfully
+                default:
+                    description: Internal server error
+    /user/resetPassword/check/{token}:
+        parameters:
+            - name: token
+              description: Reset password token
+              in: path
+              required: true
+              schema:
+                  type: string
+        get:
+            tags:
+                - user
+            summary: Check reset password token.
+            description: Сhecks if the token is valid and has not expired. The token can be checked after user clicked on the reset password link. If the token is invalid, display the error to the user.
+            operationId: checkResetPasswordToken
+            responses:
+                '200':
+                    description: Reset password token is valid
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    message:
+                                        type: string
+                                    isValid:
+                                        type: boolean
+                            example:
+                                status: 200
+                                message: Reset password token is valid
+                                isValid: true
+                '404':
+                    description: Password reset token is invalid or has expired
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    message:
+                                        type: string
+                                    isValid:
+                                        type: boolean
+                            example:
+                                status: 404
+                                message: Password reset token is invalid or has expired
+                                isValid: false
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /user/parseFile:
+        post:
+            tags:
+                - user
+            summary: Parse file.
+            description: 'parse file with potential voters'
+            operationId: parseFile
+            requestBody:
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                file:
+                                    type: string
+                                    format: binary
+            responses:
+                '200':
+                    description: New potential voter were added
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 200
+                                    message:
+                                        type: string
+                                        example: New potential voters were added
+                                    nameFile:
+                                        type: string
+                                        example: test.csv
+                '400':
+                    description: Bad file
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /user/showResult:
+        get:
+            tags:
+                - user
+            summary: Return potential voters.
+            description: 'return potential voters for capitan'
+            operationId: showResult
+            responses:
+                '200':
+                    description: 'successfull'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/PotentialVoter'
+                '400':
+                    description: not have potential voters
+                default:
+                    description: Internal server error
+            security:
+                - access_token: []
+    /user/showResultV2:
+        get:
+            tags:
+                - user
+            summary: Return contacts with potential voters.
+            description: 'Return contacts with potential voters'
+            operationId: showResultV2
+            responses:
+                '200':
+                    description: 'Contacts returned successfully'
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/ContactWithPotentialVoters'
+                '400':
+                    description: not have potential voters
+                default:
+                    description: Internal server error
+            security:
+                - access_token: []
+    /user/addVoters:
+        post:
+            tags:
+                - user
+            summary: Add voters.
+            description: 'Add voters to the capitan. Number voters not more than 10. Create a collection of voters and associate with the captain'
+            operationId: addVoters
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                voters:
+                                    type: array
+                                    items:
+                                        type: string
+                                        description: 'id potential voters'
+            responses:
+                '200':
+                    description: New voter was added
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    message:
+                                        type: string
+                '400':
+                    description: Incorrect data in voters
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    message:
+                                        type: string
+    /user/resetPassword/reset:
+        post:
+            tags:
+                - user
+            summary: Reset password.
+            description: 'Reset user password. Password must be at least 8 characters in length and contain 3 of the following 4 types of characters: lower case letters (a-z), uppercase letters (A-Z), numbers (0-9), special characters (e.g. !@#$%^&*)'
+            operationId: resetPassword
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            type: object
+                            properties:
+                                resetPasswordToken:
+                                    type: string
+                                newPassword:
+                                    type: string
+                                    minLength: 8
+                            required:
+                                - resetPasswordToken
+                                - newPassword
+                        example:
+                            resetPasswordToken: 1219d9c1-9c7d-45f9-beb0-5cbe42477611
+                            newPassword: tH32ka!32n#kLKi
+            responses:
+                '200':
+                    description: Password restored successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    message:
+                                        type: string
+                '400':
+                    description: 'Password must be at least 8 characters in length and contain 3 of the following 4 types of characters: lower case letters (a-z), uppercase letters (A-Z), numbers (0-9), special characters (e.g. !@#$%^&*)'
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    message:
+                                        type: string
+                '404':
+                    description: Password reset token is invalid or has expired
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+
+    /districts:
+        get:
+            parameters:
+                - name: address
+                  description: User address
+                  in: query
+                  required: true
+                  schema:
+                      type: string
+            tags:
+                - distircts
+            summary: Return district by address.
+            description: Return array of districts. May contain one or more districts. If it is impossible to parse the address returns an error.
+            operationId: getDistrictByAddress
+            responses:
+                '200':
+                    description: Districts successfully detected
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 200
+                                    message:
+                                        type: string
+                                        example: Districts successfully detected
+                                    districts:
+                                        type: array
+                                        items:
+                                            $ref: '#/components/schemas/Districts'
+                '400':
+                    description: Failed to parse address
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+            security:
+                - access_token: []
+
+    /task/{taskId}:
+        get:
+            tags:
+                - "task"
+            summary: Gets a task.
+            description: "Gets task details"
+            operationId: "getTask"
+            parameters:
+                - name: "taskId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Task found successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Task"
+                '404':
+                    description: Task with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+            security:
+                - access_token: []
+        patch:
+            tags:
+                - task
+            summary: Updates a task.
+            description: "Updates a task"
+            operationId: "updateTask"
+            parameters:
+                - name: "taskId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Task updated successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '404':
+                    description: Task with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+            security:
+                - access_token: []
+        delete:
+            tags:
+                - "task"
+            summary: Deletes a task.
+            description: "Deletes a task"
+            operationId: "deleteTask"
+            parameters:
+                - name: "taskId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Task removed successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '404':
+                    description: Task with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /task/all/{userId}:
+        get:
+            tags:
+                - "task"
+            summary: Gets all the tasks for the user.
+            description: "Gets task list"
+            operationId: "getTaskList"
+            parameters:
+                - name: "userId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Task found successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        taskId:
+                                            type: string
+                                            example: 788f6187-999a-4305-9580-4ad518e7cped
+                                        parentTaskId:
+                                            type: string
+                                        voterId:
+                                            type: string
+                                            example: 984f6187-608a-4305-9580-4ad518e9eded
+                                        userId:
+                                            type: string
+                                            example: 5d120807fc4f11435c1073b5
+                                        ruleId:
+                                            type: string
+                                            example: 788f6187-999a-4305-9580-4ad518e7cped
+                                        status:
+                                            type: string
+                                        taskName:
+                                            type: string
+                                            example: Get unregisteredvoters to be registered
+                                        taskSpread:
+                                            type: string
+                                            example: National
+                                        taskDescription:
+                                            type: string
+                                            example: This task voters whose voting status is <not registered>
+                                        startDate:
+                                            type: string
+                                        endDate:
+                                            type: string
+                                        subTasks:
+                                            type: array
+                                            items:
+                                                $ref: '#/components/schemas/Task'
+                '404':
+                    description: Task with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+            security:
+                - access_token: []
+    /task/all/{voterId}/voter:
+        get:
+            tags:
+                - "task"
+            summary: Gets all the tasks by voter Id.
+            description: "Gets task list for voter"
+            operationId: "getTaskListByVoterId"
+            parameters:
+                - name: "voterId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Tasks found successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: array
+                                items:
+                                    type: object
+                                    properties:
+                                        taskId:
+                                            type: string
+                                            example: 788f6187-999a-4305-9580-4ad518e7cped
+                                        parentTaskId:
+                                            type: string
+                                        voterId:
+                                            type: string
+                                            example: 984f6187-608a-4305-9580-4ad518e9eded
+                                        userId:
+                                            type: string
+                                            example: 5d120807fc4f11435c1073b5
+                                        ruleId:
+                                            type: string
+                                            example: 788f6187-999a-4305-9580-4ad518e7cped
+                                        status:
+                                            type: string
+                                        taskName:
+                                            type: string
+                                            example: Get unregisteredvoters to be registered
+                                        taskSpread:
+                                            type: string
+                                            example: National
+                                        taskDescription:
+                                            type: string
+                                            example: This task voters whose voting status is <not registered>
+                                        startDate:
+                                            type: string
+                                        endDate:
+                                            type: string
+                                        subTasks:
+                                            type: array
+                                            items:
+                                                $ref: '#/components/schemas/Task'
+                '404':
+                    description: Task with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+            security:
+                - access_token: []
+    /task/generate/{userId}:
+        get:
+            tags:
+                - "task"
+            summary: Create the tasks for newly created voters of user.
+            description: "Create the tasks for newly created voters of user"
+            operationId: "generateTasks"
+            parameters:
+                - name: "userId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Tasks processing started for voters!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: string
+                                    message:
+                                        type: string
+                '400':
+                    description: No voters found for this user
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+            security:
+                - access_token: []
+    /task:
+        post:
+            tags:
+                - task
+            summary: Creates a task.
+            description: 'Create new task'
+            operationId: addTask
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Task"
+            responses:
+                '200':
+                    description: New task created successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '400':
+                    description: Incorrect data in task
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+
+    /rule/{ruleId}:
+        get:
+            tags:
+                - "rule"
+            summary: Gets a rule.
+            description: "Gets rule details"
+            operationId: "getRule"
+            parameters:
+                - name: "ruleId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Rule found successfully
+                    content:
+                        application/json:
+                            schema:
+                                $ref: "#/components/schemas/Rule"
+                '404':
+                    description: Rule with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+            security:
+                - access_token: []
+        patch:
+            tags:
+                - rule
+            summary: Updates a rule.
+            description: "Updates a rule"
+            operationId: "updateRule"
+            parameters:
+                - name: "ruleId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Rule updated successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '404':
+                    description: Rule with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+            security:
+                - access_token: []
+        delete:
+            tags:
+                - "rule"
+            summary: Deletes a rule.
+            description: "Deletes a rule"
+            operationId: "deleteRule"
+            parameters:
+                - name: "ruleId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Rule removed successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '404':
+                    description: Rule with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+    /rule:
+        post:
+            tags:
+                - rule
+            summary: Creates a rule.
+            description: 'Create new rule'
+            operationId: addRule
+            requestBody:
+                required: true
+                content:
+                    application/json:
+                        schema:
+                            $ref: "#/components/schemas/Rule"
+            responses:
+                '200':
+                    description: New rule created successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '400':
+                    description: Incorrect data in rule
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+    /voter/all/{userId}:
+        get:
+            tags:
+                - "voter"
+            summary: Gets all the voter for the user.
+            description: "Gets voter list"
+            operationId: "getVoterList"
+            parameters:
+                - name: "userId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Voters found successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 200
+                                    count:
+                                        type: number
+                                        example: 5
+                                    voters:
+                                        type: array
+                                        items:
+                                            $ref: "#/components/schemas/Voter"
+                '404':
+                    description: No voters found for the requested userid
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+            security:
+                - access_token: []
+    /voter/{voterId}:
+        patch:
+            tags:
+                - voter
+            summary: Updates a voter.
+            description: "Updates a voter"
+            operationId: "updateVoter"
+            parameters:
+                - name: "voterId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Voter updated successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '404':
+                    description: Voter with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+            security:
+                - access_token: []
+        delete:
+            tags:
+                - "voter"
+            summary: Deletes a voter.
+            description: "Deletes a voter"
+            operationId: "deleteVoter"
+            parameters:
+                - name: "voterId"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: Voter removed successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                '404':
+                    description: Rule with the requested id was not found!
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /file/upload:
+        post:
+            tags:
+                - file
+            summary: Uploads a image file.
+            description: 'Uploads a image file'
+            operationId: uploadImage
+            requestBody:
+                required: true
+                content:
+                    multipart/form-data:
+                        schema:
+                            type: object
+                            properties:
+                                fileName:
+                                    type: string
+                                    format: binary
+            responses:
+                '200':
+                    description: Image uploaded successfully
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    success:
+                                        type: boolean
+                                    imageUrl:
+                                        type: string
+                '404':
+                    description: No image is found in request
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    status:
+                                        type: number
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    message:
+                                        type: string
+                                    status:
+                                        type: number
+
+    /twitter/get_request_toke:
+        get:
+            tags:
+                - oauth
+            summary: Get request token for Twitter.
+            description: 'Get request token'
+            operationId: GetReuestToken
+            responses:
+                '200':
+                    description: Request toke received
+                    content:
+                        aplication/json:
+                            schema:
+                                type: object
+                                properties:
+                                    token:
+                                        type: string
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /twitter/friends/list:
+        get:
+            tags:
+                - oauth
+            summary: Get friends of twitter.
+            description: 'Get friends'
+            operationId: GetFriendsofTwitter
+            parameters:
+                - name: "oauth_token"
+                  in: "query"
+                  required: true
+                  schema:
+                      type: string
+                - name: "oauth_verifier"
+                  in: "path"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: List of friends received
+                    content:
+                        aplication/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 200
+                                    message:
+                                        type: string
+                                        example: 'Action completed'
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"
+    /google/friends/list/:
+        get:
+            tags:
+                - oauth
+            summary: Get friends of google.
+            description: 'Get friends'
+            operationId: GetFriendsOfGoogle
+            parameters:
+                - name: "access_token"
+                  in: "query"
+                  required: true
+                  schema:
+                      type: string
+            responses:
+                '200':
+                    description: List of friends received
+                    content:
+                        aplication/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 200
+                                    message:
+                                        type: string
+                                        example: 'Action completed'
+                default:
+                    description: Internal server error
+                    content:
+                        application/json:
+                            schema:
+                                type: object
+                                properties:
+                                    status:
+                                        type: number
+                                        example: 500
+                                    message:
+                                        type: string
+                                        example: "{ error:'service_unavailable', errorDescription: 'Something went wrong, please try again later', businessErrorCode: 'BE-105' }"

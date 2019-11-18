@@ -1,0 +1,30 @@
+{
+  "name": "Be the wave",
+  "description": "Helping fiends vote",
+  "environments": {
+    "test": {
+      "scripts": {
+        "test": "npm test"
+      },
+      "env": {
+        "BTW_TOKEN_SECRET": "6B1B1710C9898ED291E3377DE7327F7D889FBA662A0F5C9114A15728DA92CC89",
+        "PORT": "3000",
+        "MAILGUN_API_KEY": "key-f54c4ee6b33a8bff96ef80127b400c83",
+        "MAILGUN_FROM_WHOM": "doNotREPLY@Bethewave.vote",
+        "MAILGUN_DOMAIN": "invite.bethewave.vote",
+        "REGION": "us-west-1",
+        "AWS_S3_ACCESS_KEY": "AKIARFAJDN2QAYDJN4XI",
+        "AWS_S3_SECRET_KEY": "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",
+        "CRON_TIME": "0 19 * * *",
+        "QUEUE_URL": "https://sqs.us-west-1.amazonaws.com/079475994272/TaskQueue",
+        "GOOGLE_CIVIC_API_KEY": "AIzaSyDzWDdK-PzdNY_9Tmkv-T_5NdzDdWAyMzk",
+        "MONGO_CONNECTION_STRING": "mongodb+srv://dev_user:74BW0JQboSOyKmQt@cluster0-dev-68z9l.mongodb.net/test?retryWrites=true&w=majority",
+        "NEW_RELIC_ENABLED": "true",
+        "NODE_ENV": "staging",
+        "AWS_S3_BUCKET_NAME": "bethewave",
+        "ALLOWED_TASKS_COUNT": "20",
+        "ELASTIC_NODE": "https://search-elasticsearchdev-q6dcrf56hsmqlsgcajvrfmfrwi.us-west-2.es.amazonaws.com"
+      }
+    }
+  }
+}

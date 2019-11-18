@@ -1,0 +1,286 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This is a bethewave server",
+        "version": "1.0.0",
+        "title": "Bethewave",
+        "termsOfService": "",
+        "contact": {
+            "email": "hi@bethewave.vote"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        }
+    },
+    "host": "btwapi-18.herokuapp.com",
+    "basePath": "/",
+    "tags": [{
+        "name": "Bethewave",
+        "description": "Friend help friend vote",
+        "externalDocs": {
+            "description": "",
+            "url": "https://www.bethewave.vote/"
+        }
+    }, {
+        "name": "auth",
+        "description": ""
+    }],
+    "schemes": ["https", "http"],
+    "paths": {
+        "/auth/signin": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Authenticates user.",
+                "description": "Find user by email or userId (if social login), perform checks (password if email/pass not social) and return user object if success",
+                "operationId": "signIn",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "name": "email",
+                    "in": "query",
+                    "description": "User email",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "password",
+                    "in": "query",
+                    "description": "User password (plain text)",
+                    "required": false,
+                    "type": "string"
+                }, {
+                    "name": "social",
+                    "in": "query",
+                    "description": "Is it social login",
+                    "required": false,
+                    "type": "boolean",
+                    "default": false
+                }, {
+                    "name": "userId",
+                    "in": "query",
+                    "description": "Auth0 user id (needed if social login)",
+                    "required": false,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Successful signin",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "400": {
+                        "description": "Incorrect email or password provided"
+                    }
+                }
+            }
+        },
+        "/auth/signup": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Registers user.",
+                "description": "Create user and return user object, if user by given email or userId (if social login) not exists",
+                "operationId": "signUp",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "name": "email",
+                    "in": "query",
+                    "description": "User email",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "password",
+                    "in": "query",
+                    "description": "User password (plain text)",
+                    "required": false,
+                    "type": "string"
+                }, {
+                    "name": "social",
+                    "in": "query",
+                    "description": "Is it social login",
+                    "required": false,
+                    "type": "boolean",
+                    "default": false
+                }, {
+                    "name": "userId",
+                    "in": "query",
+                    "description": "Auth0 user id (needed if social login)",
+                    "required": false,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Account created successfully",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "401": {
+                        "description": "A user with provided email address already exists"
+                    }
+                }
+            }
+        },
+        "/auth/getUser": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Get user.",
+                "description": "Find user by email or user id (if social login), and return user object, if found",
+                "operationId": "getUser",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "name": "email",
+                    "in": "query",
+                    "description": "User email",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "social",
+                    "in": "query",
+                    "description": "Is social user",
+                    "required": false,
+                    "type": "boolean",
+                    "default": false
+                }, {
+                    "name": "userId",
+                    "in": "query",
+                    "description": "Auth0 user id (needed if social login)",
+                    "required": false,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "User found",
+                        "schema": {
+                            "$ref": "#/definitions/User"
+                        }
+                    },
+                    "404": {
+                        "description": "A user with provided email address was not found"
+                    }
+                }
+            }
+        },
+        "/auth/verifyEmail": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Verify email.",
+                "description": "Find not verified email user by email, and set verified, if found",
+                "operationId": "verifyEmail",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "name": "email",
+                    "in": "query",
+                    "description": "User email",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Email verified successfully"
+                    },
+                    "401": {
+                        "description": "A user with provided email address was not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/auth/changePassword": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Change password.",
+                "description": "Find user by email, and changes his password, if found",
+                "operationId": "changePassword",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "name": "email",
+                    "in": "query",
+                    "description": "User email",
+                    "required": true,
+                    "type": "string"
+                }, {
+                    "name": "newPassword",
+                    "in": "query",
+                    "description": "User new password (plain text)",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "Password changed successfully"
+                    },
+                    "401": {
+                        "description": "A user with provided email address was not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        },
+        "/auth/removeUser": {
+            "post": {
+                "tags": ["auth"],
+                "summary": "Remove user.",
+                "description": "Find user by email, and removes him, if found",
+                "operationId": "removeUser",
+                "consumes": ["application/json"],
+                "produces": ["application/json"],
+                "parameters": [{
+                    "name": "user_id",
+                    "in": "query",
+                    "description": "User id",
+                    "required": true,
+                    "type": "string"
+                }],
+                "responses": {
+                    "200": {
+                        "description": "User removed successfully"
+                    },
+                    "400": {
+                        "description": "Invalid user id format"
+                    },
+                    "404": {
+                        "description": "User with provided id was not found"
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "User": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "example": "5cf92ec616aa911d42bce397"
+                },
+                "firstname": {
+                    "type": "string",
+                    "example": "Keanu"
+                },
+                "lastname": {
+                    "type": "string",
+                    "example": "Reeves"
+                },
+                "email": {
+                    "type": "string",
+                    "example": "k.reeves@example.com"
+                }
+            },
+            "xml": {
+                "name": "User"
+            }
+        }
+    }
+}
