@@ -26,7 +26,7 @@
     "encodeurl": "^1.0.2",
     "express": "^4.17.0",
     "express-device": "^0.4.2",
-    "express-fileupload": "^0.4.0",
+    "express-fileupload": "^1.1.9",
     "express-jwt": "^5.3.1",
     "express-jwt-authz": "^1.0.0",
     "express-rate-limit": "^2.14.2",
